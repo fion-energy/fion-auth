@@ -88,20 +88,21 @@ export function LDAPUsernamePasswordForm({ idpId, link }: Props) {
         </div>
       )}
 
-      <div className="mt-8 flex w-full flex-row items-center">
-        <BackButton data-testid="back-button" />
-        <span className="flex-grow"></span>
+      <div className="mt-8 space-y-3">
         <Button
           type="submit"
-          className="self-end"
+          className="w-full"
           variant={ButtonVariants.Primary}
           disabled={loading || !formState.isValid}
           onClick={handleSubmit(submitUsernamePassword)}
           data-testid="submit-button"
         >
-          
+
           <Translated i18nKey="submit" namespace="ldap" />
         </Button>
+        <div className="flex justify-center">
+          <BackButton />
+        </div>
       </div>
     </form>
   );

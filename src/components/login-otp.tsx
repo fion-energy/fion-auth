@@ -259,12 +259,10 @@ export function LoginOTP({ host, loginName, sessionId, requestId, organization, 
         </div>
       )}
 
-      <div className="mt-8 flex w-full flex-row items-center">
-        <BackButton data-testid="back-button" />
-        <span className="flex-grow"></span>
+      <div className="mt-8 space-y-3">
         <Button
           type="submit"
-          className="self-end"
+          className="w-full"
           variant={ButtonVariants.Primary}
           disabled={loading || !formState.isValid}
           onClick={handleSubmit((e) => {
@@ -274,6 +272,9 @@ export function LoginOTP({ host, loginName, sessionId, requestId, organization, 
         >
            <Translated i18nKey="verify.submit" namespace="otp" />
         </Button>
+        <div className="flex justify-center">
+          <BackButton />
+        </div>
       </div>
     </form>
   );

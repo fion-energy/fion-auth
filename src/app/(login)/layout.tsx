@@ -1,6 +1,5 @@
 import "@/styles/globals.scss";
 
-import { BackgroundWrapper } from "@/components/background-wrapper";
 import { LanguageProvider } from "@/components/language-provider";
 import { Skeleton } from "@/components/skeleton";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -19,32 +18,20 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html suppressHydrationWarning>
       <head />
-      <body className={`${GeistSans.variable} font-sans`}>
+      <body className={`${GeistSans.variable} font-sans bg-white dark:bg-gray-950`}>
         <ThemeProvider>
           <Tooltip.Provider>
             <Suspense
               fallback={
-                <BackgroundWrapper
-                  className={`relative flex min-h-screen flex-col justify-center bg-background-light-600 dark:bg-background-dark-600`}
-                >
-                  <div className="relative mx-auto w-full max-w-[440px] py-8">
-                    <Skeleton>
-                      <div className="h-40"></div>
-                    </Skeleton>
-                    <div className="py-2"></div>
-                  </div>
-                </BackgroundWrapper>
+                <div className="flex min-h-screen items-center justify-center">
+                  <Skeleton>
+                    <div className="h-40 w-[340px]"></div>
+                  </Skeleton>
+                </div>
               }
             >
               <LanguageProvider>
-                <BackgroundWrapper
-                  className={`relative flex min-h-screen flex-col justify-center bg-background-light-600 dark:bg-background-dark-600`}
-                >
-                  <div className="relative mx-auto w-full max-w-[1100px] py-8">
-                    <div>{children}</div>
-                    <div className="py-2"></div>
-                  </div>
-                </BackgroundWrapper>
+                {children}
               </LanguageProvider>
             </Suspense>
           </Tooltip.Provider>

@@ -194,25 +194,10 @@ export function RegisterPasskey({ sessionId, userId, isPrompt, organization, req
         </div>
       )}
 
-      <div className="mt-8 flex w-full flex-row items-center">
-        {isPrompt ? (
-          <Button
-            type="button"
-            variant={ButtonVariants.Secondary}
-            onClick={() => {
-              continueAndLogin();
-            }}
-          >
-            <Translated i18nKey="set.skip" namespace="passkey" />
-          </Button>
-        ) : (
-          <BackButton />
-        )}
-
-        <span className="flex-grow"></span>
+      <div className="mt-8 space-y-3">
         <Button
           type="submit"
-          className="self-end"
+          className="w-full"
           variant={ButtonVariants.Primary}
           disabled={loading || !formState.isValid}
           onClick={handleSubmit(submitRegisterAndContinue)}
@@ -220,6 +205,21 @@ export function RegisterPasskey({ sessionId, userId, isPrompt, organization, req
         >
            <Translated i18nKey="set.submit" namespace="passkey" />
         </Button>
+        <div className="flex justify-center">
+          {isPrompt ? (
+            <Button
+              type="button"
+              variant={ButtonVariants.Secondary}
+              onClick={() => {
+                continueAndLogin();
+              }}
+            >
+              <Translated i18nKey="set.skip" namespace="passkey" />
+            </Button>
+          ) : (
+            <BackButton />
+          )}
+        </div>
       </div>
     </form>
   );

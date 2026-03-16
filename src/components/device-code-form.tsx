@@ -76,12 +76,10 @@ export function DeviceCodeForm({ userCode }: { userCode?: string }) {
           </div>
         )}
 
-        <div className="mt-8 flex w-full flex-row items-center">
-          <BackButton />
-          <span className="flex-grow"></span>
+        <div className="mt-8 space-y-3">
           <Button
             type="submit"
-            className="self-end"
+            className="w-full"
             variant={ButtonVariants.Primary}
             disabled={loading || !formState.isValid}
             onClick={handleSubmit(submitCodeAndContinue)}
@@ -90,6 +88,9 @@ export function DeviceCodeForm({ userCode }: { userCode?: string }) {
             {" "}
             <Translated i18nKey="usercode.submit" namespace="device" />
           </Button>
+          <div className="flex justify-center">
+            <BackButton />
+          </div>
         </div>
       </form>
     </>

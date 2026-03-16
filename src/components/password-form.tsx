@@ -148,12 +148,10 @@ export function PasswordForm({ loginSettings, loginName, organization, requestId
         </div>
       )}
 
-      <div className="mt-8 flex w-full flex-row items-center">
-        <BackButton data-testid="back-button" />
-        <span className="flex-grow"></span>
+      <div className="mt-8 space-y-3">
         <Button
           type="submit"
-          className="self-end"
+          className="w-full"
           variant={ButtonVariants.Primary}
           disabled={loading || !formState.isValid}
           onClick={handleSubmit(submitPassword)}
@@ -161,6 +159,9 @@ export function PasswordForm({ loginSettings, loginName, organization, requestId
         >
            <Translated i18nKey="verify.submit" namespace="password" />
         </Button>
+        <div className="flex justify-center">
+          <BackButton />
+        </div>
       </div>
     </form>
   );
