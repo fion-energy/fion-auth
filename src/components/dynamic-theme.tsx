@@ -60,9 +60,7 @@ export function DynamicTheme({
                       <HeroCarousel
                         images={[
                           { src: `${basePath}/login-hero.jpg`, fit: "cover" },
-                          { src: `${basePath}/login-hero-2.jpg`, fit: "contain" },
                         ]}
-                        interval={10000}
                       />
                     </div>
 
