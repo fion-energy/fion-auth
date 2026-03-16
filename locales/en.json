@@ -23,7 +23,7 @@
     }
   },
   "loginname": {
-    "title": "Sign in to FION",
+    "title": "Sign in",
     "description": "",
     "register": "Register new user",
     "submit": "Continue",

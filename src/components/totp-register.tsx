@@ -142,7 +142,7 @@ export function TotpRegister({ uri, loginName, sessionId, requestId, organizatio
               <span className="flex-grow"></span>
               <Button
                 type="submit"
-                className="self-end"
+                className="w-full"
                 variant={ButtonVariants.Primary}
                 disabled={loading || !formState.isValid}
                 onClick={handleSubmit(continueWithCode)}

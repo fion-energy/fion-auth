@@ -190,10 +190,10 @@ export function ChangePasswordForm({
 
       {error && <Alert>{error}</Alert>}
 
-      <div className="mt-8 flex w-full flex-row items-center justify-between">
-        <BackButton data-testid="back-button" />
+      <div className="mt-8 space-y-3">
         <Button
           type="submit"
+          className="w-full"
           variant={ButtonVariants.Primary}
           disabled={
             loading ||
@@ -207,6 +207,9 @@ export function ChangePasswordForm({
           {" "}
           <Translated i18nKey="change.submit" namespace="password" />
         </Button>
+        <div className="flex justify-center">
+          <BackButton />
+        </div>
       </div>
     </form>
   );

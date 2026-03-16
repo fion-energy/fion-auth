@@ -136,17 +136,15 @@ export function UsernameForm({
           <Alert>{error}</Alert>
         </div>
       )}
-      <div className="mt-4 flex w-full flex-row items-center justify-end">
-        <span className="flex-grow"></span>
+      <div className="mt-4">
         <Button
           data-testid="submit-button"
           type="submit"
-          className="self-end"
+          className="w-full"
           variant={ButtonVariants.Primary}
           disabled={loading || !formState.isValid}
           onClick={handleSubmit((e) => submitLoginName(e, organization))}
         >
-          
           <Translated i18nKey="submit" namespace="loginname" />
         </Button>
       </div>

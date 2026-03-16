@@ -103,7 +103,7 @@ export function ConsentScreen({
           <Button
             data-testid="submit-button"
             type="submit"
-            className="self-end"
+            className="w-full"
             variant={ButtonVariants.Primary}
           >
             <Translated i18nKey="device.request.submit" namespace="device" />

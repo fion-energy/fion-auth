@@ -201,46 +201,10 @@ export function LoginPasskey({
           <Alert>{error}</Alert>
         </div>
       )}
-      <div className="mt-8 flex w-full flex-row items-center">
-        {altPassword ? (
-          <Button
-            type="button"
-            variant={ButtonVariants.Secondary}
-            onClick={() => {
-              const params = new URLSearchParams();
-
-              if (loginName) {
-                params.append("loginName", loginName);
-              }
-
-              if (sessionId) {
-                params.append("sessionId", sessionId);
-              }
-
-              if (requestId) {
-                params.append("requestId", requestId);
-              }
-
-              if (organization) {
-                params.append("organization", organization);
-              }
-
-              return router.push(
-                "/password?" + params, // alt is set because password is requested as alternative auth method, so passwordless prompt can be escaped
-              );
-            }}
-            data-testid="password-button"
-          >
-            <Translated i18nKey="verify.usePassword" namespace="passkey" />
-          </Button>
-        ) : (
-          <BackButton />
-        )}
-
-        <span className="flex-grow"></span>
+      <div className="mt-8 space-y-3">
         <Button
           type="submit"
-          className="self-end"
+          className="w-full"
           variant={ButtonVariants.Primary}
           disabled={loading}
           onClick={async () => {
@@ -273,6 +237,42 @@ export function LoginPasskey({
           {" "}
           <Translated i18nKey="verify.submit" namespace="passkey" />
         </Button>
+        <div className="flex justify-center">
+          {altPassword ? (
+            <Button
+              type="button"
+              variant={ButtonVariants.Secondary}
+              onClick={() => {
+                const params = new URLSearchParams();
+
+                if (loginName) {
+                  params.append("loginName", loginName);
+                }
+
+                if (sessionId) {
+                  params.append("sessionId", sessionId);
+                }
+
+                if (requestId) {
+                  params.append("requestId", requestId);
+                }
+
+                if (organization) {
+                  params.append("organization", organization);
+                }
+
+                return router.push(
+                  "/password?" + params, // alt is set because password is requested as alternative auth method, so passwordless prompt can be escaped
+                );
+              }}
+              data-testid="password-button"
+            >
+              <Translated i18nKey="verify.usePassword" namespace="passkey" />
+            </Button>
+          ) : (
+            <BackButton />
+          )}
+        </div>
       </div>
     </div>
   );
