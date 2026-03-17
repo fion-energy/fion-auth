@@ -2,6 +2,39 @@
 
 Configuration required outside this codebase to deploy the custom login app.
 
+## Environment Reference
+
+| Setting | Dev | Prod |
+|---------|-----|------|
+| Login domain | `auth.dev.fion-energy.com` | `auth.fion-energy.com` |
+| Zitadel API URL | `https://development-jzdhrq.zitadel.cloud` | `https://production-dcufuu.zitadel.cloud` |
+| Zitadel Console | Same as API URL + `/ui/console` | Same |
+| ECR image | `891377298986.dkr.ecr.eu-central-1.amazonaws.com/fion-auth` | Same repo, different tag |
+| EKS cluster | `fion-dev` | `fion-prod` |
+| K8s namespace | `dev` | `prod` |
+| GitHub environment | `Dev` | `Prod` |
+| AWS account (EKS) | `339712716017` | `891377357860` |
+
+### Build-Time Environment Variables
+
+Set during Docker image build (in GitHub Actions workflows):
+
+| Variable | Value |
+|----------|-------|
+| `NEXT_PUBLIC_BASE_PATH` | `/ui/v2/login` |
+| `NEXT_OUTPUT_MODE` | `standalone` |
+
+### Runtime Environment Variables
+
+Set via K8s deployment manifest (`deploy/{env}/deployment.yaml`):
+
+| Variable | Source | Description |
+|----------|--------|-------------|
+| `ZITADEL_API_URL` | Hardcoded in manifest | Zitadel instance URL (see table above) |
+| `ZITADEL_SERVICE_USER_TOKEN` | K8s Secret `fion-auth-secrets` | PAT for the service user |
+
+---
+
 ## Zitadel
 
 ### Service User
@@ -42,6 +75,8 @@ Registration is controlled at **two levels** — instance and organization. The 
   - Or update it: `PUT /management/v1/policies/login` with `allowRegister: false`
 
 > The Zitadel Console may not show org-level login policies in the UI. Use the API to check/fix.
+
+> **Permissions note:** The `svc-auth-app` service user (with `IAM_LOGIN_CLIENT` role) cannot modify login policies. You need a user with `ORG_OWNER` or `IAM_OWNER` role for management API calls. Use a separate admin PAT for these one-time setup operations.
 
 ### Enable Password Reset
 
@@ -169,11 +204,29 @@ aws ecr set-repository-policy --repository-name fion-auth --region eu-central-1 
   }'
 ```
 
-### 2. Deploy to EKS
+### 2. GitHub: Secrets
 
-Push to `develop` (dev) or trigger `deploy-prod.yaml` (prod). This creates the deployment, service, and **ingress** in the cluster. The ingress is what tells Traefik about the host and triggers external-dns.
+Set the `FION_AUTH_SVC` secret in the corresponding GitHub environment:
 
-### 3. DNS (Route 53)
+```bash
+# Dev
+gh secret set FION_AUTH_SVC --repo fion-energy/fion-login --env Dev
+# Prod
+gh secret set FION_AUTH_SVC --repo fion-energy/fion-login --env Prod
+```
+
+The PAT value comes from the service user created in the Zitadel step. Stored in 1Password under `API - Zitadel - svc-auth-app - {Dev,Prod}`.
+
+### 3. Deploy to EKS
+
+Push to `develop` (dev) or trigger `deploy-prod.yaml` (prod). The workflow:
+1. Builds the Docker image and pushes to ECR
+2. Creates/updates the K8s secret `fion-auth-secrets` from the `FION_AUTH_SVC` GitHub secret
+3. Applies deployment, service, and ingress manifests
+
+The ingress tells Traefik about the host and triggers external-dns.
+
+### 4. DNS (Route 53)
 
 If external-dns is running in the cluster, the ingress from step 2 automatically creates the DNS record. Otherwise create manually:
 
@@ -182,13 +235,13 @@ If external-dns is running in the cluster, the ingress from step 2 automatically
 | `auth.dev.fion-energy.com` | A / CNAME | Dev Traefik LB | Dev |
 | `auth.fion-energy.com` | A / CNAME | Prod Traefik LB | Prod |
 
-### 4. Verify
+### 5. Verify
 
 - [ ] Health check: `curl https://auth.fion-energy.com/ui/v2/login/healthy`
 - [ ] Visit login page directly: `https://auth.fion-energy.com/ui/v2/login/loginname`
 - [ ] Branding, fonts, carousel all render correctly
 
-### 5. Activate (when ready)
+### 6. Activate (when ready)
 
 Set the **Custom Login URI** in Zitadel Console. This is the switch — until this is done, users still see the built-in login.
 
