@@ -29,7 +29,6 @@ import {
   VerifyPasskeyRegistrationRequest,
   VerifyU2FRegistrationRequest,
 } from "@zitadel/proto/zitadel/user/v2/user_service_pb";
-import { unstable_cacheLife as cacheLife } from "next/cache";
 import { getTranslations } from "next-intl/server";
 import { getUserAgent } from "./fingerprint";
 import { setSAMLFormCookie } from "./saml";
@@ -37,10 +36,10 @@ import { createServiceForHost } from "./service";
 
 const useCache = process.env.DEBUG !== "true";
 
+// "use cache" needs experimental.dynamicIO, which only runs on Next.js canary
+// releases. Pass the result through until the app moves to a stable Next.js
+// release that supports cache components.
 async function cacheWrapper<T>(callback: Promise<T>) {
-  "use cache";
-  cacheLife("hours");
-
   return callback;
 }
 
